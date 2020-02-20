@@ -1,3 +1,16 @@
+/*Starting from scratch, create a Pet object using the prototypal or pseudoclassical class style
+ Set default properties for a new Pet
+ age to 1
+ hunger to 10
+ happiness to 100
+ energy to 100
+ Add the the ability to set the following properties when a new Pet is made
+ name
+ breed
+ Add the following methods
+ age -> increase age by 1 unit
+ feed -> reduce hunger by number of units of food given*/
+
 /*Advanced Content
  Add the following methods
  play -> accept unit of time and increase happiness by number of units of time until zero energy
@@ -18,18 +31,37 @@
 
 //Pseudoclassical class style
 
-var Pet = function(name, breed, food) {
+var Pet = function(name, breed, createChild) {
   this.age = 1;
   this.hunger = 10;
   this.happiness = 100;
   this.energy = 100;
   this.name = name;
   this.breed = breed;
-  this.food = food;
+  this.traints = [];
+  this.createChild = createChild;
 }
 
-Pet.prototype.increasedAge = function() { this.age++; };
-Pet.prototype.feed = function() { this.hunger - this.food; };
+Pet.prototype.increaseAge = function() { this.age++; };
+Pet.prototype.feed = function(food) { this.hunger - food; };
+Pet.prototype.play = function(time) {
+  if(this.energy > 0) {
+    this.happiness += time;
+  }
+  this.increaseAge();
+};
+Pet.prototype.nap = function(time) {
+  if(this.energy < 100) {
+    this.energy += time;
+  }
+};
+Pet.prototype.addTraints = function() {
+  this.traits = [
+    { eyeColor: 'purple'},
+    { hairLength: 'long'}
+  ]
+};
 
-var dog = Pet('snuufy', 'germansheperd', 3);
-var cat = Pet('kitty', 'meow', 4);
+var dog = new Pet('snuufy', 'germansheperd', true);
+var cat = new Pet('kitty', 'meow', true);
+cat.bind(Pet)(this.addTraints())
