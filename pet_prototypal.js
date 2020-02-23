@@ -11,27 +11,27 @@
  age -> increase age by 1 unit
  feed -> reduce hunger by number of units of food given*/
 
-  /*Advanced Content
- Add the following methods
- play -> accept unit of time and increase happiness by number of units of time until zero energy
- Age the pet once during play
- nap -> accept unit of time and increase energy by number of units of time until 100 energy
- Age the pet for every cycle of 100 units of time used by playing or napping.????
- Create a traits property as an array of objects (initially empty)
+/*Advanced Content
+Add the following methods
+play -> accept unit of time and increase happiness by number of units of time until zero energy
+Age the pet once during play
+nap -> accept unit of time and increase energy by number of units of time until 100 energy
+Age the pet for every cycle of 100 units of time used by playing or napping.????
+Create a traits property as an array of objects (initially empty)
 
-  traits: [
-            { eyeColor: "purple"},
-            { hairLength: "long" },
-            ... etc
-          ]
- Create a method to add traits to a pet.
+traits: [
+          { eyeColor: "purple"},
+          { hairLength: "long" },
+          ... etc
+        ]
+Create a method to add traits to a pet.
 
- Create the ability for your pet to create a child
- Have the pet inherit at least 1 trait from the parent.*/
+Create the ability for your pet to create a child
+Have the pet inherit at least 1 trait from the parent.*/
 
- //Prototypal Class Style
+//Prototypal Class Style
 
- var Pet = function(name, breed, createChild) {
+var Pet = function (name, breed) {
   var obj = Object.create(Pet.prototype);
   obj.age = 1;
   obj.hunger = 10;
@@ -39,35 +39,53 @@
   obj.energy = 100;
   obj.name = name;
   obj.breed = breed;
-  obj.traints = [];
-  obj.createChild = createChild;
+  obj.traits = [];
+  obj.child = null;
+  obj.time = 0;
   return obj;
+};
+
+Pet.prototype.increaseAge = function () { this.age++; };
+Pet.prototype.feed = function (food) { this.hunger - food; };
+Pet.prototype.play = function (time) {
+  if (this.energy > 0) {
+    this.happiness += time;
+  }
+  this.increaseAge();
+  if(time === 100) {
+    this.increaseAge();
+  }
+};
+Pet.prototype.nap = function (time) {
+  if (this.energy < 100) {
+    this.energy += time;
+  }
+  if(time === 100) {
+    this.increaseAge();
+  }
+};
+Pet.prototype.addTraits = function (traits) {
+  this.traits = traits;
+};
+Pet.prototype.createChild = function (name, breed) {
+  //debugger;
+  this.child = Pet(name, breed);
+  this.child.traits = this.traits;
  };
 
- Pet.prototype.increaseAge = function() { this.age++; };
- Pet.prototype.feed = function(food) { this.hunger - food; };
- Pet.prototype.play = function(time) {
-                        if(this.energy > 0) {
-                          this.happiness += time;
-                        }
-                        this.increaseAge();
-                      };
- Pet.prototype.nap = function(time) {
-                        if(this.energy < 100) {
-                          this.energy += time;
-                        }
- }
- Pet.prototype.addTraints = function() {
-                        this.traits = [
-                          { eyeColor: 'purple'},
-                          { hairLength: 'long'}
-                        ]
- }
+var dog = Pet('snuufy', 'germansheperd');
+dog.addTraits([
+  { eyeColor: "purple"},
+  { hairLength: "long" }
+]);
+dog.createChild('snuufyChild', 'germansheperd');
+//dog.bind(Pet)(this.addTraits());
 
- var dog = Pet('snuufy', 'germansheperd', true);
- var cat = Pet('kitty', 'meow', true);
+var cat = Pet('kitty', 'meow');
 
- console.log(dog.bind(Pet)(this.addTraints()));
+console.log(JSON.stringify(dog));
+
+
 
 
 

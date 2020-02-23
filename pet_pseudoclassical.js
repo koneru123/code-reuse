@@ -31,7 +31,7 @@
 
 //Pseudoclassical class style
 
-var Pet = function(name, breed, createChild) {
+var Pet = function(name, breed) {
   this.age = 1;
   this.hunger = 10;
   this.happiness = 100;
@@ -39,7 +39,8 @@ var Pet = function(name, breed, createChild) {
   this.name = name;
   this.breed = breed;
   this.traints = [];
-  this.createChild = createChild;
+  this.child = null;
+  this.time = 0;
 }
 
 Pet.prototype.increaseAge = function() { this.age++; };
@@ -49,19 +50,33 @@ Pet.prototype.play = function(time) {
     this.happiness += time;
   }
   this.increaseAge();
+  if(time === 100) {
+    this.increaseAge();
+  }
 };
 Pet.prototype.nap = function(time) {
   if(this.energy < 100) {
     this.energy += time;
   }
+  if(time === 100) {
+    this.increaseAge();
+  }
 };
-Pet.prototype.addTraints = function() {
-  this.traits = [
-    { eyeColor: 'purple'},
-    { hairLength: 'long'}
-  ]
+Pet.prototype.addTraits = function (traits) {
+  this.traits = traits;
 };
+Pet.prototype.createChild = function (name, breed) {
+  //debugger;
+  this.child = Pet(name, breed);
+  this.child.traits = this.traits;
+ };
 
-var dog = new Pet('snuufy', 'germansheperd', true);
+var dog = new Pet('snuufy', 'germansheperd');
+dog.increaseAge();
+dog.addTraits([
+  { eyeColor: "purple"},
+  { hairLength: "long" }
+]);
+dog.createChild('snuufyChild', 'germansheperd');
 var cat = new Pet('kitty', 'meow', true);
-cat.bind(Pet)(this.addTraints())
+console.log(JSON.stringify(dog));
